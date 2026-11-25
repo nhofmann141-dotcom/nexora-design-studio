@@ -89,6 +89,110 @@ function escapeHTML(s){
 return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 </script>
+
+<!-- NEXORA AI IMAGE GENERATOR -->
+<section id="nexora-ai" class="ai-studio">
+  <h2>✦ NEXORA AI</h2>
+  <p>Verwandle deine Ideen in einzigartige Bilder.</p>
+
+  <textarea id="aiPrompt"
+    placeholder="Beschreibe dein Wunschbild..."></textarea>
+
+  <button id="generateBtn" onclick="generateImage()">
+    ✨ Bild generieren
+  </button>
+
+  <p id="aiStatus"></p>
+  <div id="aiResult"></div>
+</section>
+
+<script src="https://js.puter.com/v2/"></script>
+
+<style>
+.ai-studio {
+  background: #111018;
+  color: white;
+  padding: 25px;
+  border-radius: 18px;
+  max-width: 600px;
+  margin: 30px auto;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  border: 1px solid #7139a8;
+}
+
+.ai-studio h2 {
+  color: #b77aff;
+  font-size: 28px;
+}
+
+.ai-studio textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 110px;
+  padding: 15px;
+  background: #211b2c;
+  color: white;
+  border: 1px solid #7541a6;
+  border-radius: 12px;
+  resize: vertical;
+}
+
+.ai-studio button {
+  margin-top: 15px;
+  padding: 14px 25px;
+  background: linear-gradient(90deg,#7139a8,#b04cff);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ai-studio button:disabled {
+  opacity: 0.5;
+}
+
+#aiResult img {
+  width: 100%;
+  max-width: 450px;
+  margin-top: 20px;
+  border-radius: 12px;
+}
+
+#aiStatus {
+  color: #c9a3ff;
+}
+</style>
+
+<script>
+async function generateImage() {
+  const prompt = document.getElementById("aiPrompt").value.trim();
+  const status = document.getElementById("aiStatus");
+  const result = document.getElementById("aiResult");
+  const button = document.getElementById("generateBtn");
+
+  if (!prompt) {
+    status.textContent = "Bitte beschreibe zuerst dein Bild.";
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent = "✨ Dein Bild wird erstellt...";
+  result.innerHTML = "";
+
+  try {
+    const image = await puter.ai.txt2img(prompt);
+    result.appendChild(image);
+    status.textContent = "Dein Bild ist fertig!";
+  } catch (error) {
+    status.textContent = "Fehler: " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+}
+</script>
+<!-- ENDE NEXORA AI -->
 </body><!-- NEXORA Besucherzähler -->
 <style>
   .nexora-counter {
