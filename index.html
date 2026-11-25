@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXORA – Design Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090812;color:white;font-family:Arial,sans-serif}
+header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #292238}
+.logo{font-size:26px;font-weight:bold;color:#b78aff;letter-spacing:3px}
+nav a{color:#ddd;text-decoration:none;margin-left:18px;font-size:14px}
+.hero{text-align:center;padding:100px 20px 75px;background:radial-gradient(ellipse at top,#38205e 0%,#090812 65%)}
+.tag{color:#c59aff;border:1px solid #7444a7;padding:9px 16px;border-radius:30px;font-size:12px}
+h1{font-size:clamp(42px,8vw,76px);margin:30px 0 15px}
+h1 span{color:#b58aff}
+.hero p{color:#aaa;font-size:17px;line-height:1.7}
+.btn{display:inline-block;background:#a66cff;color:white;padding:15px 28px;border-radius:12px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}
+section{padding:65px 7%}
+h2{font-size:32px}
+.muted{color:#aaa;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#171322;border:1px solid #382b4d;padding:25px;border-radius:18px}
+.card h3{color:#c39aff}
+textarea{width:100%;min-height:130px;background:#100d19;border:1px solid #60458a;border-radius:12px;padding:15px;color:white;font-size:16px}
+#result{display:none;margin-top:20px;padding:20px;background:#211630;border-radius:12px;line-height:1.7}
+footer{text-align:center;padding:35px;color:#777;border-top:1px solid #292238}
+@media(max-width:600px){nav a{margin-left:8px;font-size:12px}.hero{padding-top:75px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">NEXORA.</div>
+<nav>
+<a href="#studio">Studio</a>
+<a href="#about">Über uns</a>
+</nav>
+</header>
+
+<div class="hero">
+<span class="tag">THE FUTURE OF DESIGN</span>
+<h1>Deine Ideen.<br><span>Unser Universum.</span></h1>
+<p>Entdecke neue kreative Möglichkeiten.<br>Willkommen bei NEXORA Design Studio.</p>
+<a class="btn" href="#studio">Studio entdecken →</a>
+</div>
+
+<section id="studio">
+<h2>Dein kreatives Studio.</h2>
+<p class="muted">Beschreibe deine Designidee und erstelle einen kreativen Konzeptvorschlag.</p>
+<div class="card">
+<h3>✦ NEXORA Idea Studio</h3>
+<textarea id="idea" placeholder="Beschreibe deine Idee ... z.B. ein modernes Logo für eine Modemarke"></textarea>
+<br><br>
+<button class="btn" onclick="generate()">Idee entwickeln →</button>
+<div id="result"></div>
+</div>
+</section>
+
+<section id="about">
+<h2>Warum NEXORA?</h2>
+<div class="grid">
+<div class="card"><h3>✦ Kreativität</h3><p class="muted">Neue Ideen und kreative Inspiration.</p></div>
+<div class="card"><h3>◈ Modern</h3><p class="muted">Ein digitales Studio mit modernem Design.</p></div>
+<div class="card"><h3>∞ Kostenlos starten</h3><p class="muted">Entdecke NEXORA ohne Bezahlung.</p></div>
+</div>
+</section>
+
+<footer>
+<div class="logo">NEXORA.</div>
+<p>Deine Ideen verdienen einen Platz.</p>
+<p>© 2026 NEXORA Studio</p>
+</footer>
+
+<script>
+function generate(){
+const idea=document.getElementById('idea').value.trim();
+if(!idea){alert('Bitte gib zuerst eine Idee ein.');return;}
+const result=document.getElementById('result');
+result.style.display='block';
+result.innerHTML='<h3>Dein Designkonzept</h3>'+
+'<p><b>Projekt:</b> '+escapeHTML(idea)+'</p>'+
+'<p><b>Stil:</b> Modern, minimalistisch und hochwertig</p>'+
+'<p><b>Farben:</b> Schwarz, Violett und Silber</p>'+
+'<p><b>Empfehlung:</b> Klare Formen, starke Typografie und ein unverwechselbares Erscheinungsbild.</p>'+
+'<small>Dies ist ein lokaler Konzeptvorschlag, keine echte KI-Bildgenerierung.</small>';
+}
+function escapeHTML(s){
+return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>
