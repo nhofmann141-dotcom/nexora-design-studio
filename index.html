@@ -1,7 +1,35 @@
 
 <!DOCTYPE html>
 <html lang="de">
-<head>
+
+<style>
+#nexora-nav {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 1100px;
+  z-index: 9999;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  background: rgba(15,15,20,0.65);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 18px;
+  transition: opacity 0.45s ease,
+              filter 0.45s ease,
+              transform 0.45s ease;
+  opacity: 1;
+}
+
+#nexora-nav.nav-hidden {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translate(-50%, -25px);
+  pointer-events: none;
+}
+</style>
+  <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXORA – Design Studio</title>
@@ -29,13 +57,34 @@ footer{text-align:center;padding:35px;color:#777;border-top:1px solid #292238}
 @media(max-width:600px){nav a{margin-left:8px;font-size:12px}.hero{padding-top:75px}}
 </style>
 </head>
-<body>
+
+<script>
+(function () {
+  const nav = document.getElementById("nexora-nav");
+  if (!nav) return;
+
+  let lastScroll = window.scrollY;
+
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.scrollY;
+
+    if (currentScroll < 80 || currentScroll < lastScroll - 5) {
+      nav.classList.remove("nav-hidden");
+    } else if (currentScroll > lastScroll + 5) {
+      nav.classList.add("nav-hidden");
+    }
+
+    lastScroll = currentScroll;
+  }, { passive: true });
+})();
+</script>
+  <body>
 <header>
 <div class="logo">NEXORA.</div>
 <navid="nexora-nav">
 <a href="#studio">Studio</a>
 <a href="#about">Über uns</a>
-</nav>
+</navid="nexora-nav">
 </header>
 
 <div class="hero">
