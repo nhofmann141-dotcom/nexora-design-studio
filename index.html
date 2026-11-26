@@ -274,6 +274,184 @@ async function generateImage() {
   });
 })();
 </script>
+
+<style>
+#nexora-reviews {
+  max-width: 650px;
+  margin: 70px auto;
+  padding: 28px;
+  border: 1px solid rgba(174,100,255,.35);
+  border-radius: 22px;
+  background: rgba(20,13,35,.88);
+  color: white;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 35px rgba(147,51,234,.12);
+}
+#nexora-reviews h2 {
+  color: #c084fc;
+  font-size: 27px;
+}
+.nexora-stars {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 22px 0;
+}
+.nexora-star {
+  border: 0;
+  background: none;
+  color: #555;
+  font-size: 38px;
+  cursor: pointer;
+  transition: .2s;
+}
+.nexora-star.active,
+.nexora-star:hover {
+  color: #c084fc;
+  transform: scale(1.15);
+}
+#nexora-feedback {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 95px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #7040a0;
+  background: #130d20;
+  color: white;
+  resize: vertical;
+}
+#nexora-submit {
+  margin-top: 15px;
+  padding: 14px 25px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg,#7e22ce,#c084fc);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+#nexora-review-message {
+  margin-top: 15px;
+  color: #c084fc;
+}
+#nexora-average {
+  font-size: 36px;
+  color: #d8b4fe;
+}
+</style>
+
+<section id="nexora-reviews">
+  <h2>Deine Meinung zählt.</h2>
+  <p>Wie gefällt dir NEXORA?</p>
+
+  <div id="nexora-average">– / 5</div>
+  <p id="nexora-count">Noch keine Bewertungen</p>
+
+  <div class="nexora-stars">
+    <button class="nexora-star" data-rating="1">★</button>
+    <button class="nexora-star" data-rating="2">★</button>
+    <button class="nexora-star" data-rating="3">★</button>
+    <button class="nexora-star" data-rating="4">★</button>
+    <button class="nexora-star" data-rating="5">★</button>
+  </div>
+
+  <textarea id="nexora-feedback"
+    maxlength="300"
+    placeholder="Was gefällt dir an NEXORA? (optional)"></textarea>
+
+  <br>
+
+  <button id="nexora-submit">Bewertung abgeben</button>
+
+  <p id="nexora-review-message"></p>
+</section>
+
+<script>
+(() => {
+  const key = "nexora-local-reviews";
+  let rating = 0;
+
+  const stars = document.querySelectorAll(
+    "#nexora-reviews .nexora-star"
+  );
+
+  const message = document.getElementById(
+    "nexora-review-message"
+  );
+
+  function getReviews() {
+    try {
+      return JSON.parse(localStorage.getItem(key)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function render() {
+    const reviews = getReviews();
+    const average = reviews.length
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0;
+
+    document.getElementById("nexora-average").textContent =
+      reviews.length ? average.toFixed(1) + " / 5" : "– / 5";
+
+    document.getElementById("nexora-count").textContent =
+      reviews.length + (reviews.length === 1
+        ? " Bewertung" : " Bewertungen");
+  }
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      rating = Number(star.dataset.rating);
+
+      stars.forEach(s => {
+        s.classList.toggle(
+          "active",
+          Number(s.dataset.rating) <= rating
+        );
+      });
+    });
+  });
+
+  document.getElementById("nexora-submit")
+    .addEventListener("click", () => {
+      if (!rating) {
+        message.textContent = "Bitte wähle zuerst Sterne aus.";
+        return;
+      }
+
+      const reviews = getReviews();
+
+      if (reviews.length >= 1000) {
+        message.textContent = "Lokaler Speicher voll.";
+        return;
+      }
+
+      reviews.push({
+        rating,
+        feedback: document.getElementById(
+          "nexora-feedback"
+        ).value.trim()
+      });
+
+      try {
+        localStorage.setItem(key, JSON.stringify(reviews));
+        message.textContent = "Danke für deine Bewertung!";
+        rating = 0;
+        stars.forEach(s => s.classList.remove("active"));
+        document.getElementById("nexora-feedback").value = "";
+        render();
+      } catch {
+        message.textContent = "Speichern momentan nicht möglich.";
+      }
+    });
+
+  render();
+})();
+</script>
 </body><!-- NEXORA Besucherzähler -->
 <style>
   .nexora-counter {
