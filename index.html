@@ -193,6 +193,87 @@ async function generateImage() {
 }
 </script>
 <!-- ENDE NEXORA AI -->
+
+<style>
+#nexora-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 20%, #35105d 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 80%, #190b38 0%, transparent 45%),
+    #08070e;
+}
+</style>
+
+<canvas id="nexora-bg"></canvas>
+
+<script>
+(() => {
+  const canvas = document.getElementById("nexora-bg");
+  const ctx = canvas.getContext("2d");
+
+  let particles = [];
+  let width, height;
+  let animationId;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+
+    particles = Array.from(
+      { length: Math.min(85, Math.floor(width / 14)) },
+      () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 2 + 0.5,
+        speed: Math.random() * 0.35 + 0.12,
+        alpha: Math.random() * 0.7 + 0.2
+      })
+    );
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    particles.forEach(p => {
+      p.y -= p.speed;
+
+      if (p.y < -5) {
+        p.y = height + 5;
+        p.x = Math.random() * width;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(183, 105, 255, ${p.alpha})`;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = "#a855f7";
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    animationId = requestAnimationFrame(animate);
+  }
+
+  resize();
+  animate();
+
+  window.addEventListener("resize", resize);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animationId);
+    } else {
+      cancelAnimationFrame(animationId);
+      animate();
+    }
+  });
+})();
+</script>
 </body><!-- NEXORA Besucherzähler -->
 <style>
   .nexora-counter {
